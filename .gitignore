@@ -1,0 +1,13 @@
+# Development
+.env
+wp-config.php
+*.log
+
+# Build files
+*.zip
+node_modules/
+vendor/
+
+# OS files
+.DS_Store
+Thumbs.db

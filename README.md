@@ -29,12 +29,7 @@ git clone https://github.com/yourusername/smart-alt-text.git
 cd smart-alt-text
 ```
 
-2. Install dependencies (if using Composer):
-```bash
-composer install
-```
-
-3. Create a zip file for testing:
+2. Create a zip file for testing:
 ```bash
 zip -r smart-alt-text.zip . -x ".*" -x "__MACOSX" -x "*.git*"
 ```
@@ -125,10 +120,11 @@ zip -r smart-alt-text.zip . -x ".*" -x "__MACOSX" -x "*.git*" -x "node_modules/*
 
 ## Security
 
-- API keys are encrypted using AES-256-CBC before storage
-- Nonce verification for all AJAX requests
-- Capability checks for administrative actions
-- Input sanitization and validation
+- API keys are stored securely in WordPress database
+- All API requests are made server-side
+- Input is sanitized and validated
+- AJAX requests are nonce-protected
+- Database queries are prepared statements
 
 ## Support
 
