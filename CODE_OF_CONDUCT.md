@@ -30,7 +30,6 @@ Examples of unacceptable behavior include:
 
 If you believe someone is violating the code of conduct, please report it by:
 
-1. Emailing the project maintainers at [maintainer@email.com]
 2. Creating a confidential issue in our issue tracker
 3. Reaching out to any of the project maintainers directly
 
