@@ -111,7 +111,7 @@ smart-alt-text/
 
 1. Update version number in:
    - `smart-alt-text.php`
-   - `readme.txt` (if exists)
+   - `readme.md`
 
 2. Create release zip:
 ```bash
@@ -128,7 +128,7 @@ zip -r smart-alt-text.zip . -x ".*" -x "__MACOSX" -x "*.git*" -x "node_modules/*
 
 ## Support
 
-For issues and feature requests, please [create an issue](https://github.com/yourusername/smart-alt-text/issues) on GitHub.
+For issues and feature requests, please create an issue on GitHub.
 
 ## License
 
