@@ -4,19 +4,20 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
     exit;
 }
 
-// Delete options
-delete_option('smart_alt_text_api_key');
-delete_option('smart_alt_text_char_limit');
-delete_option('smart_alt_text_formula');
-delete_option('smart_alt_text_db_version');
+// Delete plugin options
+$options_to_delete = [
+    'solo_ai_website_creator_alt_text_settings',
+    'solo_ai_website_creator_alt_text_encryption_key',
+    'solo_ai_website_creator_alt_text_db_version'
+];
 
-// Drop custom tables
-global $wpdb;
-$wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}smart_alt_text_usage");
+foreach ($options_to_delete as $option) {
+    delete_option($option);
+}
 
 // Clear any remaining transients
-delete_transient('smart_alt_text_processing');
+delete_transient('solo_ai_website_creator_alt_text_processing');
 
 // Clear scheduled hooks
-wp_clear_scheduled_hook('smart_alt_text_cleanup');
+wp_clear_scheduled_hook('solo_ai_website_creator_alt_text_cleanup');
 ?> 

@@ -25,7 +25,7 @@ $coverage_percentage = $total_images > 0 ? round(($images_with_alt / $total_imag
 ?>
 
 <div class="wrap">
-    <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+    <h1><?php esc_html_e('Solo AI Alt Text Statistics', 'solo-ai-website-creator-alt-text-generator'); ?></h1>
 
     <div class="smart-alt-text-stats">
         <div class="stats-grid">
@@ -34,7 +34,7 @@ $coverage_percentage = $total_images > 0 ? round(($images_with_alt / $total_imag
                     <div class="stats-circle" data-percentage="<?php echo esc_attr($coverage_percentage); ?>">
                         <div class="stats-circle-inner">
                             <div class="stats-percentage"><?php echo esc_html($coverage_percentage); ?>%</div>
-                            <div class="stats-label"><?php _e('Coverage', 'smart-alt-text'); ?></div>
+                            <div class="stats-label"><?php esc_html_e('Coverage', 'solo-ai-website-creator-alt-text-generator'); ?></div>
                         </div>
                     </div>
                 </div>
@@ -42,17 +42,17 @@ $coverage_percentage = $total_images > 0 ? round(($images_with_alt / $total_imag
 
             <div class="stats-card">
                 <div class="stats-number"><?php echo esc_html($total_images); ?></div>
-                <div class="stats-label"><?php _e('Total Images', 'smart-alt-text'); ?></div>
+                <div class="stats-label"><?php esc_html_e('Total Images', 'solo-ai-website-creator-alt-text-generator'); ?></div>
             </div>
 
             <div class="stats-card">
                 <div class="stats-number"><?php echo esc_html($images_with_alt); ?></div>
-                <div class="stats-label"><?php _e('Images with Alt Text', 'smart-alt-text'); ?></div>
+                <div class="stats-label"><?php esc_html_e('Images with Alt Text', 'solo-ai-website-creator-alt-text-generator'); ?></div>
             </div>
 
             <div class="stats-card">
                 <div class="stats-number"><?php echo esc_html($total_images - $images_with_alt); ?></div>
-                <div class="stats-label"><?php _e('Images without Alt Text', 'smart-alt-text'); ?></div>
+                <div class="stats-label"><?php esc_html_e('Images without Alt Text', 'solo-ai-website-creator-alt-text-generator'); ?></div>
             </div>
         </div>
     </div>
