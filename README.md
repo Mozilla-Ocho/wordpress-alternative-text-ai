@@ -1,135 +1,56 @@
-# Smart Alt Text WordPress Plugin
+=== Solo AI Website Creator - Alt text generator ===
+Contributors: your_wp_username
+Tags: accessibility, images, alt text, ai, seo
+Requires at least: 5.0
+Tested up to: 6.7.1
+Requires PHP: 7.4
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Automatically generate alt text for your WordPress images using X.AI's (formerly Twitter) image understanding API.
+A WordPress plugin that uses X.AI's vision API to automatically generate descriptive alt text for images.
 
-## Features
+== Description ==
 
-- 🤖 Automatic alt text generation using X.AI
-- 🔒 Secure API key storage with encryption
-- 🖼️ Support for JPEG and PNG images
-- 🔄 Bulk processing of existing images
-- ⚡ Auto-generation for new uploads
-- 📝 Customizable prefix and suffix text
-- 🎯 Option to update image title, caption, and description
+Solo AI Alt Text Generator helps improve your website's accessibility by automatically generating descriptive alt text for your images using X.AI's advanced vision API.
 
-## Installation
+== Features ==
 
-### Production Use
+* Automatic alt text generation for new image uploads
+* Bulk processing for existing images
+* Manual alt text editing with auto-save
+* Support for image title, caption, and description updates
+* Usage statistics and tracking
+* Secure API key management
 
-1. Download the latest release zip file
-2. Go to WordPress Admin → Plugins → Add New → Upload Plugin
-3. Upload the zip file and click "Install Now"
-4. Click "Activate" to enable the plugin
+== Installation ==
 
-### Development Setup
+1. Upload the plugin files to `/wp-content/plugins/solo-ai-alt-text`
+2. Activate the plugin through the 'Plugins' screen in WordPress
+3. Configure your X.AI API key in the plugin settings
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/smart-alt-text.git
-cd smart-alt-text
-```
+== Frequently Asked Questions ==
 
-2. Create a zip file for testing:
-```bash
-zip -r smart-alt-text.zip . -x ".*" -x "__MACOSX" -x "*.git*"
-```
+= How do I get an X.AI API key? =
 
-## Configuration
+Visit the [X.AI Dashboard](https://x.ai/api) to get your API key.
 
-### Getting an X.AI API Key
+= What image formats are supported? =
 
-1. Visit [X.AI's platform](https://x.ai)
-2. Sign up or log in to your account
-3. Go to API section
-4. Generate a new API key
-5. Copy the API key for use in the plugin
+Currently, JPEG and PNG images are supported.
 
-### Plugin Settings
+== Screenshots ==
 
-1. Go to WordPress Admin → Smart Alt Text → Settings
+1. Settings page
+2. Bulk processing interface
+3. Statistics dashboard
 
-2. API Settings:
-   - Enter your X.AI API key
-   - The key will be securely encrypted in the database
+== Changelog ==
 
-3. Generation Settings:
-   - **Auto Generation**: Enable to automatically generate alt text for new image uploads
-   - **Update Fields**: Choose which fields to update:
-     - Image title
-     - Image caption
-     - Image description
-   - **Text Modifications**:
-     - Prefix: Text to add before the generated alt text
-     - Suffix: Text to add after the generated alt text
+= 1.0.0 =
+* Initial release
 
-## Usage
+== Upgrade Notice ==
 
-### Manual Alt Text Generation
-
-1. Go to Media Library
-2. Click on an image
-3. Click the "Analyze" button to generate alt text
-
-### Bulk Processing
-
-1. Go to Smart Alt Text → Images
-2. Select images you want to process
-3. Click "Generate Alt Text" to process multiple images
-
-### Supported Image Types
-
-- JPEG/JPG
-- PNG
-
-Note: Other formats like AVIF, WebP, GIF are not currently supported by the X.AI API.
-
-## Development Notes
-
-### File Structure
-
-```
-smart-alt-text/
-├── assets/
-│   ├── css/
-│   │   └── admin.css
-│   └── js/
-│       └── admin.js
-├── includes/
-│   ├── class-admin.php
-│   ├── class-image-analyzer.php
-│   ├── class-activator.php
-│   └── class-deactivator.php
-├── templates/
-│   ├── settings-page.php
-│   ├── bulk-page.php
-│   └── stats-page.php
-├── smart-alt-text.php
-└── README.md
-```
-
-### Building for Release
-
-1. Update version number in:
-   - `smart-alt-text.php`
-   - `readme.txt` (if exists)
-
-2. Create release zip:
-```bash
-zip -r smart-alt-text.zip . -x ".*" -x "__MACOSX" -x "*.git*" -x "node_modules/*" -x "tests/*"
-```
-
-## Security
-
-- API keys are stored securely in WordPress database
-- All API requests are made server-side
-- Input is sanitized and validated
-- AJAX requests are nonce-protected
-- Database queries are prepared statements
-
-## Support
-
-For issues and feature requests, please [create an issue](https://github.com/yourusername/smart-alt-text/issues) on GitHub.
-
-## License
-
-This project is licensed under the GPL v2 or later - see the [LICENSE](LICENSE) file for details. 
+= 1.0.0 =
+Initial release of the plugin. 

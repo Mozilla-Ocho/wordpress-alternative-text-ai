@@ -59,7 +59,7 @@ class SmartAltText {
      */
     public function add_plugin_links($links) {
         $plugin_links = [
-            '<a href="' . admin_url('admin.php?page=smart-alt-text') . '">' . __('Settings', 'smart-alt-text') . '</a>',
+            '<a href="' . admin_url('admin.php?page=smart-alt-text') . '">' . __('Settings', 'solo-ai-website-creator-alt-text-generator') . '</a>',
         ];
         return array_merge($plugin_links, $links);
     }

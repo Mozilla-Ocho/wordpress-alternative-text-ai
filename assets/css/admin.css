@@ -1,39 +1,65 @@
-.smart-alt-text-admin-container {
-    max-width: 1200px;
-    margin: 20px 0;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 30px;
-}
-
-/* Form Styles */
-.smart-alt-text-admin-container form {
+.solo-ai-alt-text-admin-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
     background: #fff;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.smart-alt-text-admin-container .form-table th {
-    padding: 20px 10px 20px 0;
+.solo-ai-alt-text-admin-container form {
+    margin-top: 20px;
+}
+
+.solo-ai-alt-text-admin-container .form-table {
+    margin-top: 20px;
+}
+
+.solo-ai-alt-text-admin-container .form-table th {
     width: 200px;
+    padding: 20px 10px 20px 0;
 }
 
-.smart-alt-text-admin-container input[type="text"],
-.smart-alt-text-admin-container input[type="password"],
-.smart-alt-text-admin-container input[type="number"] {
+.solo-ai-alt-text-admin-container input[type="text"],
+.solo-ai-alt-text-admin-container input[type="password"],
+.solo-ai-alt-text-admin-container input[type="number"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    padding: 8px 12px;
-    transition: border-color 0.3s ease;
 }
 
-.smart-alt-text-admin-container input[type="text"]:focus,
-.smart-alt-text-admin-container input[type="password"]:focus,
-.smart-alt-text-admin-container input[type="number"]:focus {
+.solo-ai-alt-text-admin-container input[type="text"]:focus,
+.solo-ai-alt-text-admin-container input[type="password"]:focus,
+.solo-ai-alt-text-admin-container input[type="number"]:focus {
     border-color: #2271b1;
     box-shadow: 0 0 0 1px #2271b1;
     outline: none;
+}
+
+.solo-ai-alt-text-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.solo-ai-alt-text-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.solo-ai-alt-text-input:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.solo-ai-alt-text-input.success {
+    border-color: #46b450;
+}
+
+.solo-ai-alt-text-input.error {
+    border-color: #dc3232;
 }
 
 /* Stats Page */
@@ -217,21 +243,6 @@
     }
 } 
 
-.smart-alt-text-table {
-    width: 100%;
-    border-spacing: 0;
-    border-collapse: collapse;
-}
-
-.smart-alt-text-input {
-    width: 100%;
-    max-width: 300px;
-}
-
-.smart-alt-text-input:disabled {
-    background-color: #f8f8f8;
-}
-
 .usage-list {
     margin: 0;
     padding: 0;
@@ -283,11 +294,13 @@
     text-align: right;
 }
 
-/* Success/Error states */
-.smart-alt-text-input.success {
-    border-color: #46b450;
+/* Admin Menu Icon */
+#adminmenu .toplevel_page_solo-ai-website-creator .wp-menu-image svg {
+    fill: rgba(240, 246, 252, 0.7); /* Default state color */
+    transition: all .1s ease-in-out;
 }
 
-.smart-alt-text-input.error {
-    border-color: #dc3232;
+#adminmenu .toplevel_page_solo-ai-website-creator:hover .wp-menu-image svg,
+#adminmenu .toplevel_page_solo-ai-website-creator.current .wp-menu-image svg {
+    fill: #fff; /* Hover and active state color */
 } 

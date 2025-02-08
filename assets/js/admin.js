@@ -1,21 +1,49 @@
 // Debug check for script loading
-console.log('Smart Alt Text: Script file loaded');
+console.log('Solo AI Alt Text: Script file loaded');
 
 jQuery(document).ready(function($) {
-    console.log('Smart Alt Text: jQuery ready');
-    console.log('Smart Alt Text: Initial settings:', smart_alt_text_obj);
+    // Check if our object exists
+    if (typeof solo_ai_alt_text_obj === 'undefined') {
+        console.error('Solo AI Alt Text: Required settings object is not defined');
+        return;
+    }
+
+    // Debug API key validation
+    $.ajax({
+        url: solo_ai_alt_text_obj.ajax_url,
+        type: 'POST',
+        data: {
+            action: 'get_api_key_debug_info',
+            nonce: solo_ai_alt_text_obj.nonce
+        },
+        success: function(response) {
+            if (response.success && response.data) {
+                console.log('Solo AI Alt Text: API Key Validation Debug Info:', response.data);
+            }
+        }
+    });
+
+    console.log('Solo AI Alt Text: jQuery ready');
+    console.log('Solo AI Alt Text: Initial settings:', solo_ai_alt_text_obj);
+
+    // Debug: Log all analyze buttons found
+    console.log('Solo AI Alt Text: Found analyze buttons:', $('.analyze-button').length);
+    console.log('Solo AI Alt Text: Found alt text inputs:', $('.solo-ai-alt-text-input').length);
 
     // Handle alt text input changes with debounce
     let saveTimeout;
-    $(document).on('input', '.smart-alt-text-input', function() {
+    $(document).on('input', '.solo-ai-alt-text-input', function() {
         const $input = $(this);
         const imageId = $input.data('image-id');
         const altText = $input.val();
 
-        console.log('Smart Alt Text: Input changed - ', {
+        console.log('Solo AI Alt Text: Input changed - ', {
             imageId,
             altText,
-            element: $input[0]
+            element: $input[0],
+            hasImageId: typeof imageId !== 'undefined',
+            inputClass: $input.attr('class'),
+            dataAttributes: $input.data()
         });
 
         // Clear any pending save
@@ -23,9 +51,11 @@ jQuery(document).ready(function($) {
 
         // Set a new timeout to save after typing stops
         saveTimeout = setTimeout(() => {
-            console.log('Smart Alt Text: Saving alt text - ', {
+            console.log('Solo AI Alt Text: Saving alt text - ', {
                 imageId,
-                altText
+                altText,
+                ajaxUrl: solo_ai_alt_text_obj?.ajax_url,
+                hasNonce: !!solo_ai_alt_text_obj?.nonce
             });
             saveAltText($input, imageId, altText);
         }, 1000); // Wait 1 second after typing stops before saving
@@ -34,31 +64,42 @@ jQuery(document).ready(function($) {
     // Handle analyze button clicks
     $(document).on('click', '.analyze-button', function(e) {
         e.preventDefault();
+        console.log('Solo AI Alt Text: Analyze button clicked - raw event', e);
+
         const $button = $(this);
+        console.log('Solo AI Alt Text: Button element:', $button[0]);
+        console.log('Solo AI Alt Text: Button data attributes:', $button.data());
+
         const imageId = $button.data('image-id');
         const imageUrl = $button.data('image-url');
 
-        console.log('Smart Alt Text: Analyze button clicked', {
+        console.log('Solo AI Alt Text: Analyze button clicked', {
             imageId,
             imageUrl,
-            settings: smart_alt_text_obj,
-            apiKeyStatus: smart_alt_text_obj.has_api_key ? 'Present' : 'Missing'
+            buttonElement: $button[0],
+            hasImageId: typeof imageId !== 'undefined',
+            hasImageUrl: typeof imageUrl !== 'undefined',
+            settings: solo_ai_alt_text_obj,
+            apiKeyStatus: solo_ai_alt_text_obj?.has_api_key ? 'Present' : 'Missing',
+            ajaxUrl: solo_ai_alt_text_obj?.ajax_url,
+            hasNonce: !!solo_ai_alt_text_obj?.nonce
         });
 
         if (!imageId || !imageUrl) {
-            console.error('Smart Alt Text: Missing image data', {
+            console.error('Solo AI Alt Text: Missing image data', {
                 imageId,
-                imageUrl
+                imageUrl,
+                buttonData: $button.data()
             });
             alert('Error: Missing image data');
             return;
         }
 
-        if (!smart_alt_text_obj.has_api_key) {
-            console.error('Smart Alt Text: Missing API key', {
-                settings: smart_alt_text_obj
+        if (!solo_ai_alt_text_obj?.has_api_key) {
+            console.error('Solo AI Alt Text: Missing API key', {
+                settings: solo_ai_alt_text_obj
             });
-            alert(smart_alt_text_obj.i18n.no_api_key);
+            alert(solo_ai_alt_text_obj?.i18n?.no_api_key || 'Please configure your API key');
             return;
         }
 
@@ -66,27 +107,33 @@ jQuery(document).ready(function($) {
     });
 
     function saveAltText($input, imageId, altText) {
-        console.log('Smart Alt Text: Starting save request', {
+        console.log('Solo AI Alt Text: Starting save request', {
             imageId,
             altText,
-            ajaxUrl: smart_alt_text_obj.ajax_url
+            ajaxUrl: solo_ai_alt_text_obj?.ajax_url,
+            hasNonce: !!solo_ai_alt_text_obj?.nonce,
+            inputElement: $input[0]
         });
 
         // Show saving indicator
         $input.css('opacity', '0.6');
 
         $.ajax({
-            url: smart_alt_text_obj.ajax_url,
+            url: solo_ai_alt_text_obj.ajax_url,
             type: 'POST',
             dataType: 'json',
             data: {
                 action: 'save_alt_text',
-                nonce: smart_alt_text_obj.nonce,
+                nonce: solo_ai_alt_text_obj.nonce,
                 image_id: imageId,
                 alt_text: altText
             },
             success: function(response) {
-                console.log('Smart Alt Text: Save response', response);
+                console.log('Solo AI Alt Text: Save response', {
+                    response,
+                    success: response?.success,
+                    message: response?.data?.message
+                });
                 
                 if (response.success) {
                     // Briefly show success state
@@ -96,16 +143,21 @@ jQuery(document).ready(function($) {
                     }, 1000);
                 } else {
                     // Show error state
-                    console.error('Smart Alt Text: Save failed', response);
+                    console.error('Solo AI Alt Text: Save failed', response);
                     $input.css('border-color', '#dc3232');
-                    alert(response.data.message || 'Error saving alt text');
+                    alert(response.data?.message || 'Error saving alt text');
                     setTimeout(() => {
                         $input.css('border-color', '');
                     }, 1000);
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Smart Alt Text: Save error', {xhr, status, error});
+                console.error('Solo AI Alt Text: Save error', {
+                    xhr,
+                    status,
+                    error,
+                    responseText: xhr.responseText
+                });
                 $input.css('border-color', '#dc3232');
                 alert('Error saving alt text: ' + error);
                 setTimeout(() => {
@@ -119,56 +171,124 @@ jQuery(document).ready(function($) {
     }
 
     function analyzeImage($button, imageId, imageUrl) {
-        console.log('Smart Alt Text: Starting analysis', {
+        console.log('Solo AI Alt Text: Starting analysis', {
             imageId,
             imageUrl,
-            ajaxUrl: smart_alt_text_obj.ajax_url,
-            settings: smart_alt_text_obj
+            ajaxUrl: solo_ai_alt_text_obj.ajax_url,
+            settings: solo_ai_alt_text_obj,
+            buttonElement: $button[0]
         });
 
-        const $input = $button.closest('tr').find('.smart-alt-text-input');
+        const $input = $button.closest('tr').find('.solo-ai-alt-text-input, input[type="text"]');
+        console.log('Solo AI Alt Text: Found input element:', $input[0]);
+        
         const originalText = $button.text();
 
         $button.prop('disabled', true)
-               .text(smart_alt_text_obj.i18n.analyzing)
+               .text(solo_ai_alt_text_obj?.i18n?.analyzing || 'Analyzing...')
                .addClass('updating-message');
 
         $.ajax({
-            url: smart_alt_text_obj.ajax_url,
+            url: solo_ai_alt_text_obj.ajax_url,
             type: 'POST',
             dataType: 'json',
             data: {
                 action: 'analyze_image',
-                nonce: smart_alt_text_obj.nonce,
+                nonce: solo_ai_alt_text_obj.nonce,
                 image_id: imageId,
                 image_url: imageUrl
             },
             success: function(response) {
-                console.log('Smart Alt Text: Analysis response', response);
+                console.group('Solo AI Alt Text: Analysis Response');
+                console.log('Response:', response);
                 
                 if (response.success) {
-                    $input.val(response.data.alt_text);
+                    if (response.data.debug_info) {
+                        console.group('Debug Steps:');
+                        response.data.debug_info.forEach(step => {
+                            if (step.includes('[ERROR]')) {
+                                console.error(step);
+                            } else {
+                                console.log(step);
+                            }
+                        });
+                        console.groupEnd();
+                    }
+                    
+                    // Update the input field with the new alt text
+                    if ($input.length) {
+                        $input.val(response.data.alt_text);
+                        console.log('Solo AI Alt Text: Updated input field with new alt text');
+                    } else {
+                        console.error('Solo AI Alt Text: Could not find input field to update');
+                    }
+                    
                     $button.removeClass('updating-message')
                            .addClass('updated')
-                           .text(smart_alt_text_obj.i18n.analyzed);
+                           .text(solo_ai_alt_text_obj?.i18n?.analyzed || 'Done!');
                     
-                    // Also save the alt text
-                    saveAltText($input, imageId, response.data.alt_text);
+                    // Save the alt text
+                    if ($input.length) {
+                        saveAltText($input, imageId, response.data.alt_text);
+                    }
                 } else {
-                    // Show error state
-                    console.error('Smart Alt Text: Analysis failed', response);
+                    console.error('Analysis failed:', response.data?.message);
+                    if (response.data?.debug_info) {
+                        console.group('Error Debug Info:');
+                        response.data.debug_info.forEach(step => console.error(step));
+                        console.groupEnd();
+                    }
+                    
                     $button.removeClass('updating-message')
                            .addClass('error')
-                           .text(smart_alt_text_obj.i18n.error);
-                    alert(response.data.message || 'Error analyzing image');
+                           .text(solo_ai_alt_text_obj?.i18n?.error || 'Error');
+                    alert(response.data?.message || 'Error analyzing image');
                 }
+                console.groupEnd();
             },
             error: function(xhr, status, error) {
-                console.error('Smart Alt Text: Analysis error', {xhr, status, error});
+                console.group('Solo AI Alt Text: AJAX Error');
+                console.error('Status:', status);
+                console.error('Error:', error);
+                
+                let errorMessage = 'Error analyzing image. Please try again.';
+                let debugInfo = [];
+
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.data?.message) {
+                        errorMessage = response.data.message;
+                    }
+                    if (response.data?.debug_info) {
+                        debugInfo = response.data.debug_info;
+                    }
+                } catch (e) {
+                    console.error('Failed to parse response:', xhr.responseText);
+                    // Try to extract error from HTML response
+                    const htmlMatch = xhr.responseText.match(/<p>(.*?)<\/p>/);
+                    if (htmlMatch) {
+                        errorMessage = htmlMatch[1].replace(/<[^>]+>/g, '');
+                    }
+                }
+
+                if (debugInfo.length > 0) {
+                    console.group('Debug Information:');
+                    debugInfo.forEach(step => {
+                        if (step.includes('[ERROR]')) {
+                            console.error(step);
+                        } else {
+                            console.log(step);
+                        }
+                    });
+                    console.groupEnd();
+                }
+
+                console.groupEnd();
+                
                 $button.removeClass('updating-message')
                        .addClass('error')
-                       .text(smart_alt_text_obj.i18n.error);
-                alert('Error analyzing image: ' + error);
+                       .text(solo_ai_alt_text_obj?.i18n?.error || 'Error');
+                alert(errorMessage);
             },
             complete: function() {
                 setTimeout(() => {
@@ -178,5 +298,83 @@ jQuery(document).ready(function($) {
                 }, 2000);
             }
         });
+    }
+
+    // Handle bulk action
+    $('#doaction, #doaction2').on('click', function() {
+        const action = $(this).prev('select').val();
+        if (action === 'analyze') {
+            const selectedImages = $('input[name="images[]"]:checked');
+            if (selectedImages.length === 0) {
+                alert('Please select at least one image to analyze.');
+                return;
+            }
+
+            // Process images sequentially
+            let processed = 0;
+            const total = selectedImages.length;
+
+            function processNext() {
+                if (processed >= total) {
+                    return;
+                }
+
+                const $checkbox = $(selectedImages[processed]);
+                const imageId = $checkbox.val();
+                const imageUrl = $checkbox.data('image-url');
+                const $button = $(`button[data-image-id="${imageId}"]`);
+
+                // Trigger the analyze button click
+                $button.trigger('click');
+
+                // Wait for the analysis to complete before processing the next image
+                const checkInterval = setInterval(function() {
+                    if (!$button.prop('disabled')) {
+                        clearInterval(checkInterval);
+                        processed++;
+                        processNext();
+                    }
+                }, 500);
+            }
+
+            processNext();
+        }
+    });
+
+    // Function to log debug info
+    function logDebugInfo(response) {
+        console.group('Smart Alt Text - Debug Information');
+        if (response.debug_info && response.debug_info.steps) {
+            response.debug_info.steps.forEach(function(step) {
+                if (step.includes('[ERROR]')) {
+                    console.error(step);
+                } else {
+                    console.log(step);
+                }
+            });
+        }
+        console.groupEnd();
+    }
+
+    // Modify your existing AJAX success/error handlers
+    function handleAjaxSuccess(response) {
+        if (response.success) {
+            console.log('Smart Alt Text: Success Response', response);
+            logDebugInfo(response.data);
+            // ... rest of your success handling code ...
+        } else {
+            console.error('Smart Alt Text: Error Response', response);
+            logDebugInfo(response.data);
+            // ... rest of your error handling code ...
+        }
+    }
+
+    function handleAjaxError(xhr, status, error) {
+        console.error('Smart Alt Text: AJAX Error', {
+            status: status,
+            error: error,
+            response: xhr.responseText
+        });
+        // ... rest of your error handling code ...
     }
 }); 
